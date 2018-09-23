@@ -1,4 +1,4 @@
-console.log('starting app');
+// console.log('starting app');
 
 // const fs = require('fs');
 // const _ = require('lodash');
@@ -10,8 +10,8 @@ const notes = require('./notes');
 const argv = yargs.argv;
 const command = argv._[0];
 
-console.log('Yargs: ', argv);
-console.log('Command: ', command);
+// console.log('Yargs: ', argv);
+// console.log('Command: ', command);
 
 if (command === 'add') {
   const note = notes.addNote(argv.title, argv.body);
@@ -24,7 +24,9 @@ if (command === 'add') {
   }
   
 } else if (command === 'list') {
-  notes.getAll();
+  const allNotes = notes.getAll();
+  console.log(`Printing ${allNotes.length} note(s)`);
+  allNotes.forEach(note => notes.logNote(note));
 
 } else if (command === 'read') {
   let note = notes.getNote(argv.title);
