@@ -1,0 +1,3 @@
+using darksky API to get weather data
+
+using mapbox api to get geocode of the city
