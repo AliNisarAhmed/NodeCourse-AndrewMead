@@ -16,10 +16,20 @@ const argv = yargs
 
 const city = encodeURIComponent(argv.c);
 
+// https://api.mapbox.com/geocoding/v5/mapbox.places/karachi.json?access_token=pk.eyJ1IjoiYWE4NyIsImEiOiJjam43cnRoY3MwZG9sM3lwYnQzajVoMXptIn0.yrMqrYMcWwuQnDYVt6cyMA
+
 const mapbox = `https://api.mapbox.com/geocoding/v5/mapbox.places/${city}.json?access_token=pk.eyJ1IjoiYWE4NyIsImEiOiJjam43cnRoY3MwZG9sM3lwYnQzajVoMXptIn0.yrMqrYMcWwuQnDYVt6cyMA`;
 
 
 request(mapbox, {json: true}, (error, response, body) => {
+  if (error) {
+    console.log('Unable to connect to mapbox api');
+  }
+
+  if (body.features.length === 0) {
+    throw new Error('Bad request, please check the name of the city');
+  }
+
   let {
     geometry: {
       coordinates: [
@@ -31,7 +41,6 @@ request(mapbox, {json: true}, (error, response, body) => {
 
   [ longitude, latitude ] = [Number(longitude.toFixed(4)), Number(latitude.toFixed(4))];
 
-  // console.log(longitude, latitude);
 
   // https://api.darksky.net/forecast/501be056e4669cd2ca7e3605cb569676/24.8607,67.0011?units=si&exclude=minutely,hourly,flags
 
@@ -50,14 +59,16 @@ request(mapbox, {json: true}, (error, response, body) => {
     url,
     json: true
   }, (error, response, body) => {
-    if(error) console.log(error);
+    if(error) console.log('error using darksky api');
+    console.log("***************");
     console.log(`City: ${body.timezone.split('/')[1]}`);
     console.log(`Continent: ${body.timezone.split('/')[0]}`);
     console.log('Longitude: ', longitude);
     console.log('Latitude: ', latitude);
     console.log(`Current Temperature: ${body.currently.temperature} Celcius`);
-    console.log(`Humidity: ${body.currently.humidity * 100}%`);
+    console.log(`Humidity: ${(body.currently.humidity * 100).toFixed(2)}%`);
     console.log('Summary: ', body.currently.summary);
+    console.log("***************");
   });
 
 
