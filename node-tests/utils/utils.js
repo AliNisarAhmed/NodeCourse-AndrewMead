@@ -5,13 +5,13 @@ module.exports.square = (x) => x * x;
 module.exports.asyncAdd = (a, b, callback) => {
   setTimeout(() => {
     callback(a + b);
-  }, 2000)
+  }, 100)
 }
 
 module.exports.asyncSquare = (a, callback) => {
   setTimeout(() => {
     callback(a * a);
-  }, 1000);
+  }, 100);
 }
 
 module.exports.obj = {
